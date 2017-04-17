@@ -1,7 +1,7 @@
 (ns gyfu.core-spec
   (:require [clojure.spec :as s]
             [clojure.spec.test :as stest]
-            [gyfu.core :as sch]
+            [gyfu.core :as g]
             [gyfu.core-spec :as cs]
             [gyfu.xpath-spec :as xs])
   (:import (clojure.lang IFn)

@@ -1,6 +1,6 @@
 (ns gyfu.core-test
   (:require [clojure.test :refer :all :exclude [report]]
-            [gyfu.core :as sch]
+            [gyfu.core :as g]
             [gyfu.elements :refer :all]
             [gyfu.xpath :as xpath]
             [gyfu.saxon :as saxon]))
@@ -15,7 +15,7 @@
                            (pattern "bar" nil
                                         (rule "baz" nil
                                                   (assert "bar plus baz is 3" "$bar + xs:int(.) eq 3"))))]
-    (is (= (sch/compile schema nil)
+    (is (= (g/compile schema nil)
            {:tests   [{:message       "bar plus baz is 3"
                        :pattern       {:attributes nil
                                        :title      "bar"}
@@ -30,7 +30,7 @@
 (deftest successful-assertion
   (let [node (saxon/build "<foo><bar>a</bar><bar>b</bar></foo>")
         assertion (assert "bar is a or b" ". eq 'a' or . eq 'b'")]
-    (is (= (map #(sch/apply-test compiler % nil assertion) (match node "bar"))
+    (is (= (map #(g/apply-test compiler % nil assertion) (match node "bar"))
            [{:node          (select node "foo/bar[. eq 'a']")
              :line-number   1
              :column-number 11
@@ -45,7 +45,7 @@
 (deftest unsuccessful-assertion
   (let [node (saxon/build "<foo><bar>a</bar><bar>c</bar></foo>")
         assertion (assert "bar is a or b" ". eq 'a' or . eq 'b'")]
-    (is (= (map #(sch/apply-test compiler % nil assertion) (match node "bar"))
+    (is (= (map #(g/apply-test compiler % nil assertion) (match node "bar"))
            [{:node          (select node "foo/bar[. eq 'a']")
              :line-number   1
              :column-number 11
@@ -63,7 +63,7 @@
                            (pattern "bar" nil
                                         (rule "baz" nil
                                                   (assert "bar plus baz is 3" "$bar + xs:int(.) eq 3"))))]
-    (is (= (-> schema (sch/compile {}) (sch/apply node))
+    (is (= (-> schema (g/compile {}) (g/apply node))
            {:schema {:title      "foo",
                      :attributes {:let {:bar "xs:int(foo/@bar)"}}},
             :tests  [{:pattern       {:title "bar", :attributes nil},
@@ -81,7 +81,7 @@
                                         (rule "foo"
                                                   {:let {:bar "xs:int(@bar)"}}
                                                   (assert "bar plus baz is 3" "$bar + xs:int(baz) eq 3"))))]
-    (is (= (-> schema (sch/compile {}) (sch/apply node))
+    (is (= (-> schema (g/compile {}) (g/apply node))
            {:schema {:attributes nil
                      :title      nil}
             :tests  [{:column-number 14
@@ -98,16 +98,16 @@
   (let [a (pattern "a" {:id :a} (rule "a" nil (assert "a" "a")))
         b (pattern "b" {:id :b} (rule "b" nil (assert "b" "b")))
         c (pattern "c" {:id :c} (rule "c" nil (assert "c" "c")))]
-    (is (= (sch/get-active-patterns
+    (is (= (g/get-active-patterns
              (schema "schema" {:phases {:my-phase #{:a :b}}} a b c) :my-phase)
            #{a b}))))
 
 (deftest active-patterns-nil-returns-all-patterns
   (let [a (pattern "a" {:id :a} (rule "a" nil (assert "a" "a")))
         b (pattern "b" {:id :b} (rule "b" nil (assert "b" "b")))]
-    (is (= (sch/get-active-patterns (schema nil nil a b) nil) #{a b}))))
+    (is (= (g/get-active-patterns (schema nil nil a b) nil) #{a b}))))
 
 (deftest active-patterns-without-match-returns-empty-set
   (let [a (pattern "a" {:id :a} (rule "a" nil (assert "a" "a")))
         b (pattern "b" {:id :b} (rule "b" nil (assert "b" "b")))]
-    (is (= (sch/get-active-patterns (schema nil nil a b) :nope) #{}))))
+    (is (= (g/get-active-patterns (schema nil nil a b) :nope) #{}))))
