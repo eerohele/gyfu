@@ -8,9 +8,7 @@
                           XdmValue
                           XPathSelector
                           XPathCompiler)
-      (net.sf.saxon.pattern Pattern)
-      (net.sf.saxon.sxpath IndependentContext)
-      (net.sf.saxon.expr PackageData EarlyEvaluationContext)))
+      (net.sf.saxon.pattern Pattern)))
 
 ;; An XPath namespace composed of a string prefix and a string URI.
 (defrecord Namespace [prefix uri])

@@ -2,10 +2,7 @@
   (:require [gyfu.utils :as u]
             [gyfu.xpath :as xpath]
             [gyfu.saxon :as saxon])
-  (:refer-clojure :exclude [apply compile])
-  (:import (net.sf.saxon.s9api QName XdmNode)
-           (java.io File)
-           (java.net URI)))
+  (:refer-clojure :exclude [apply compile]))
 
 (defn eval-bindings
   "Evaluate a set of XPath variable bindings defined in a Schematron element.

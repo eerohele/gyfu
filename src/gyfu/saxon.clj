@@ -3,14 +3,16 @@
             [clojure.data.xml :as xml]
             [clojure.zip :as zip])
   (:import (net.sf.saxon Configuration)
-           (net.sf.saxon.s9api Processor XdmNode QName ExtensionFunction
-                               SequenceType OccurrenceIndicator XdmAtomicValue
-                               XdmItem XdmValue Serializer)
+           (net.sf.saxon.s9api Serializer
+                               Processor
+                               QName
+                               XdmAtomicValue
+                               XdmNode
+                               XdmValue)
            (javax.xml.transform Source)
            (javax.xml.transform.stream StreamSource)
            (java.io File StringReader PipedInputStream PipedOutputStream)
-           (java.net URI URL)
-           (net.sf.saxon.type ItemType)
+           (java.net URI)
            (clojure.lang Keyword)))
 
 (def ^Configuration configuration
