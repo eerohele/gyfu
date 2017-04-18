@@ -3,7 +3,8 @@
             [gyfu.core :as g]
             [gyfu.elements :refer :all]
             [gyfu.xpath :as xpath]
-            [gyfu.saxon :as saxon]))
+            [gyfu.saxon :as saxon])
+  (:import (java.net URI)))
 
 (def ^:private compiler (xpath/compiler))
 (def ^:private match (partial xpath/match compiler))
@@ -32,11 +33,13 @@
         assertion (assert "bar is a or b" ". eq 'a' or . eq 'b'")]
     (is (= (map #(g/apply-test compiler % nil assertion) (match node "bar"))
            [{:node          (select node "foo/bar[. eq 'a']")
+             :node-name     (saxon/->qname "bar")
              :line-number   1
              :column-number 11
              :message       "bar is a or b"
              :success       true}
             {:node          (select node "foo/bar[. eq 'b']")
+             :node-name     (saxon/->qname "bar")
              :line-number   1
              :column-number 23
              :message       "bar is a or b"
@@ -47,11 +50,13 @@
         assertion (assert "bar is a or b" ". eq 'a' or . eq 'b'")]
     (is (= (map #(g/apply-test compiler % nil assertion) (match node "bar"))
            [{:node          (select node "foo/bar[. eq 'a']")
+             :node-name     (saxon/->qname "bar")
              :line-number   1
              :column-number 11
              :message       "bar is a or b"
              :success       true}
             {:node          (select node "foo/bar[. eq 'c']")
+             :node-name     (saxon/->qname "bar")
              :line-number   1
              :column-number 23
              :message       "bar is a or b"
@@ -64,12 +69,14 @@
                                         (rule "baz" nil
                                                   (assert "bar plus baz is 3" "$bar + xs:int(.) eq 3"))))]
     (is (= (-> schema (g/compile-schema {}) (g/apply-schema node))
-           {:schema {:title      "foo",
+           {:document-uri (URI. "")
+            :schema {:title      "foo",
                      :attributes {:let {:bar "xs:int(foo/@bar)"}}},
             :tests  [{:pattern       {:title "bar", :attributes nil},
                       :rule          {:context "baz", :attributes nil},
                       :message       "bar plus baz is 3",
                       :node          (select node "foo/baz")
+                      :node-name     (saxon/->qname "baz")
                       :line-number   1,
                       :column-number 19,
                       :success       true}]}))))
@@ -82,17 +89,19 @@
                                                   {:let {:bar "xs:int(@bar)"}}
                                                   (assert "bar plus baz is 3" "$bar + xs:int(baz) eq 3"))))]
     (is (= (-> schema (g/compile-schema {}) (g/apply-schema node))
-           {:schema {:attributes nil
-                     :title      nil}
-            :tests  [{:column-number 14
-                      :line-number   1
-                      :message       "bar plus baz is 3"
-                      :node          (select node "foo")
-                      :pattern       {:attributes nil
-                                      :title      "bar"}
-                      :rule          {:attributes {:let {:bar "xs:int(@bar)"}}
-                                      :context    "foo"}
-                      :success       true}]}))))
+           {:document-uri (URI. "")
+            :schema       {:attributes nil
+                           :title      nil}
+            :tests        [{:column-number 14
+                            :line-number   1
+                            :message       "bar plus baz is 3"
+                            :node          (select node "foo")
+                            :node-name     (saxon/->qname "foo")
+                            :pattern       {:attributes nil
+                                            :title      "bar"}
+                            :rule          {:attributes {:let {:bar "xs:int(@bar)"}}
+                                            :context    "foo"}
+                            :success       true}]}))))
 
 (deftest active-patterns-with-match-returns-only-matched-patterns
   (let [a (pattern "a" {:id :a} (rule "a" nil (assert "a" "a")))
