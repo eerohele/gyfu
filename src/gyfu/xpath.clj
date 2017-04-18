@@ -88,16 +88,13 @@
   (doseq [[name _] variables] (.declareVariable compiler (saxon/->qname name)))
   compiler)
 
-;; TODO: Refactor. This is fucking stupid. Also, shadowing?
 (defn- bind-selector
-  [compiler xpath-type pattern-or-selector context bindings]
+  [compiler xpath-type pattern context bindings]
   (let [bindings (partition 2 (flatten bindings))
         compiler (declare-variables compiler bindings)
-        selector (if (or (instance? Pattern pattern-or-selector) (instance? XPathSelector pattern-or-selector))
-                   pattern-or-selector
-                   (.load (if (= xpath-type :pattern)
-                            (.compilePattern compiler pattern-or-selector)
-                            (.compile compiler pattern-or-selector))))]
+        selector (.load (if (= xpath-type :pattern)
+                          (.compilePattern compiler pattern)
+                          (.compile compiler pattern)))]
     (doseq [[name value] bindings] (set-variable selector name value))
     (doto selector (.setContextItem context))))
 
@@ -162,7 +159,8 @@
 (defn matches?
   "Check whether a node matches a XPath pattern (compiled with [[pattern]])."
   [compiler node pattern & bindings]
-  (.matches pattern (.getUnderlyingNode node)
+  (.matches pattern
+            (.getUnderlyingNode node)
             (-> compiler static-context early-evaluation-context)))
 
 ;; TODO
