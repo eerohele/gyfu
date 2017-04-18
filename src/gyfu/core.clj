@@ -71,11 +71,11 @@
   [compiler patterns]
   (for [pattern patterns]
     (for [rule (:rules pattern)]
-      (for [assertion (:tests rule)]
+      (for [test (:tests rule)]
         (merge {:pattern       (dissoc pattern :rules)
                 :rule          (dissoc rule :tests)
                 :xpath-pattern (xpath/pattern compiler (:context rule))}
-               assertion)))))
+               test)))))
 
 (defn- compile-patterns
   [compiler patterns]
