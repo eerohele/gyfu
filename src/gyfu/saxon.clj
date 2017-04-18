@@ -12,7 +12,7 @@
            (javax.xml.transform Source)
            (javax.xml.transform.stream StreamSource)
            (java.io File StringReader PipedInputStream PipedOutputStream)
-           (java.net URI)
+           (java.net URI URL)
            (clojure.lang Keyword)))
 
 (def ^Configuration configuration
@@ -59,6 +59,9 @@
 
 (extend-protocol XmlNode URI
   (build [^URI uri] (.build builder (StreamSource. uri))))
+
+(extend-protocol XmlNode URL
+  (build [^URL url] (.build builder (StreamSource. (.toString url)))))
 
 (defprotocol XmlValue
   "A protocol for things that can be converted into a Saxon
