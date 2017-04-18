@@ -11,7 +11,7 @@
 
 (defn write-tag
   [tag]
-  (write :grey "<" tag ">"))
+  (write :yellow "<" tag ">"))
 
 (defn write-results
   [results]
