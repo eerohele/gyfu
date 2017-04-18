@@ -90,6 +90,7 @@
                    (rule "ReqdExctnDt"
                          (assert "The requested execution date must be a maximum of 5 days before or 90 days after the current date."
                                  #(date-is-within-allowed-interval? 5 90 (c/to-date (xml1-> % text))))))
+                   (rule "ReqdExctnDt" of
 
           (pattern "Group Header"
                    {:id :GrpHdr}
