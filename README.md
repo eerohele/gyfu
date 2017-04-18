@@ -1,13 +1,12 @@
 # Gyfu
 
-Gyfu «ᚷ» attempts to become an [ISO Schematron][schematron] implementation in
-Clojure.
+Gyfu «ᚷ» aims to become an [ISO Schematron][schematron] implementation in Clojure.
 
 In other words, Gyfu is a library for testing that your XML document has the things it should have and doesn't have the things it shouldn't.
  
 For an example, [see here][example].
 
-**Gyfu is currently unreleased**.
+**Gyfu is currently unreleased and under development**.
 
 ## vs. Schematron
 
