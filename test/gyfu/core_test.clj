@@ -13,9 +13,9 @@
 
 (deftest compile-schema
   (let [schema (schema "foo" {:let {:bar "xs:int(foo/@bar)"}}
-                           (pattern "bar" nil
-                                        (rule "baz" nil
-                                                  (assert "bar plus baz is 3" "$bar + xs:int(.) eq 3"))))]
+                       (pattern "bar" nil
+                                (rule "baz" nil
+                                      (assert "bar plus baz is 3" "$bar + xs:int(.) eq 3"))))]
     (is (= (g/compile-schema schema nil)
            {:tests   [{:message       "bar plus baz is 3"
                        :pattern       {:attributes nil
@@ -65,29 +65,29 @@
 (deftest bind-schema-variable
   (let [node (saxon/build "<foo bar=\"1\"><baz>2</baz></foo>")
         schema (schema "foo" {:let {:bar "xs:int(foo/@bar)"}}
-                           (pattern "bar" nil
-                                        (rule "baz" nil
-                                                  (assert "bar plus baz is 3" "$bar + xs:int(.) eq 3"))))]
+                       (pattern "bar" nil
+                                (rule "baz" nil
+                                      (assert "bar plus baz is 3" "$bar + xs:int(.) eq 3"))))]
     (is (= (-> schema (g/compile-schema {}) (g/apply-schema node))
            {:document-uri (URI. "")
-            :schema {:title      "foo",
-                     :attributes {:let {:bar "xs:int(foo/@bar)"}}},
-            :tests  [{:pattern       {:title "bar", :attributes nil},
-                      :rule          {:context "baz", :attributes nil},
-                      :message       "bar plus baz is 3",
-                      :node          (select node "foo/baz")
-                      :node-name     (saxon/->qname "baz")
-                      :line-number   1,
-                      :column-number 19,
-                      :success       true}]}))))
+            :schema       {:title      "foo",
+                           :attributes {:let {:bar "xs:int(foo/@bar)"}}},
+            :tests        [{:pattern       {:title "bar", :attributes nil},
+                            :rule          {:context "baz", :attributes nil},
+                            :message       "bar plus baz is 3",
+                            :node          (select node "foo/baz")
+                            :node-name     (saxon/->qname "baz")
+                            :line-number   1,
+                            :column-number 19,
+                            :success       true}]}))))
 
 (deftest bind-rule-variable
   (let [node (saxon/build "<foo bar=\"1\"><baz>2</baz></foo>")
         schema (schema nil nil
-                           (pattern "bar" nil
-                                        (rule "foo"
-                                                  {:let {:bar "xs:int(@bar)"}}
-                                                  (assert "bar plus baz is 3" "$bar + xs:int(baz) eq 3"))))]
+                       (pattern "bar" nil
+                                (rule "foo"
+                                      {:let {:bar "xs:int(@bar)"}}
+                                      (assert "bar plus baz is 3" "$bar + xs:int(baz) eq 3"))))]
     (is (= (-> schema (g/compile-schema {}) (g/apply-schema node))
            {:document-uri (URI. "")
             :schema       {:attributes nil
