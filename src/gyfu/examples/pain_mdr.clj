@@ -47,7 +47,6 @@
 (defn has-valid-bic-code?
   "Check whether the given BIC is valid."
   [bic]
-  fnil
   (try
     (fnil (BicUtil/validate (xml1-> bic text)) true)
     (catch BicFormatException e false)))
