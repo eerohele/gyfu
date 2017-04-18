@@ -8,7 +8,12 @@
             [clj-time.core :as t]
             [clj-time.local :as l])
   (:refer-clojure :exclude [assert])
-  (:import (org.iban4j BicUtil IbanUtil)))
+  (:import (org.iban4j BicUtil
+                       BicFormatException
+                       IbanUtil
+                       IbanFormatException
+                       UnsupportedCountryException
+                       InvalidCheckDigitException)))
 
 ;; I'm an example Gyfu schema.
 ;;
@@ -33,12 +38,19 @@
 (defn has-valid-iban-number?
   "Check whether the given IBAN is valid."
   [iban]
-  (IbanUtil/validate (xml1-> iban text)))
+  (try
+    (fnil (IbanUtil/validate (xml1-> iban text)) true)
+    (catch IbanFormatException e false)
+    (catch InvalidCheckDigitException e false)
+    (catch UnsupportedCountryException e false)))
 
 (defn has-valid-bic-code?
   "Check whether the given BIC is valid."
   [bic]
-  (BicUtil/validate (xml1-> bic text)))
+  fnil
+  (try
+    (fnil (BicUtil/validate (xml1-> bic text)) true)
+    (catch BicFormatException e false)))
 
 (defn date-is-within-allowed-interval?
   "Check whether the requested execution date of a payment is within the allowed
