@@ -15,7 +15,7 @@
                            (pattern "bar" nil
                                         (rule "baz" nil
                                                   (assert "bar plus baz is 3" "$bar + xs:int(.) eq 3"))))]
-    (is (= (g/compile schema nil)
+    (is (= (g/compile-schema schema nil)
            {:tests   [{:message       "bar plus baz is 3"
                        :pattern       {:attributes nil
                                        :title      "bar"}
@@ -63,7 +63,7 @@
                            (pattern "bar" nil
                                         (rule "baz" nil
                                                   (assert "bar plus baz is 3" "$bar + xs:int(.) eq 3"))))]
-    (is (= (-> schema (g/compile {}) (g/apply node))
+    (is (= (-> schema (g/compile-schema {}) (g/apply-schema node))
            {:schema {:title      "foo",
                      :attributes {:let {:bar "xs:int(foo/@bar)"}}},
             :tests  [{:pattern       {:title "bar", :attributes nil},
@@ -81,7 +81,7 @@
                                         (rule "foo"
                                                   {:let {:bar "xs:int(@bar)"}}
                                                   (assert "bar plus baz is 3" "$bar + xs:int(baz) eq 3"))))]
-    (is (= (-> schema (g/compile {}) (g/apply node))
+    (is (= (-> schema (g/compile-schema {}) (g/apply-schema node))
            {:schema {:attributes nil
                      :title      nil}
             :tests  [{:column-number 14

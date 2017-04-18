@@ -12,10 +12,8 @@
 (deftest ^:bench benchmark-parse-and-validate-same-file-n-times
   (let [options {:default-xpath-namespace
                  "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"}
-        schema (g/compile examples/pain-mdr-schema options)
+        schema (g/compile-schema examples/pain-mdr-schema options)
         files ["ISO20022.xml" "DABA_ADV.xml" "DABA_REF.xml" "DABA_SDVA.xml"]]
     (bench
       (dotimes [_ 100]
-        (map (partial g/apply schema) (mapv load-fixture files))))))
-
-
+        (map (partial g/apply-schema schema) (mapv load-fixture files))))))

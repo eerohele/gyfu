@@ -1,8 +1,7 @@
 (ns gyfu.core
   (:require [gyfu.utils :as u]
             [gyfu.xpath :as xpath]
-            [gyfu.saxon :as saxon])
-  (:refer-clojure :exclude [apply compile]))
+            [gyfu.saxon :as saxon]))
 
 (defn eval-bindings
   "Evaluate a set of XPath variable bindings defined in a Schematron element.
@@ -84,7 +83,7 @@
        (sort-by #(.getDefaultPriority (:xpath-pattern %)))
        vec))
 
-(defn compile
+(defn compile-schema
   "Compile a schema.
 
   The purpose of compiling the schema is to make applying the schema faster and
@@ -109,7 +108,7 @@
       (merge (apply-test compiler node bindings test)
              (dissoc test :xpath-pattern :message :test)))))
 
-(defn apply
+(defn apply-schema
   "Validate the given XML document against a schema.
 
   Use [[schema]], [[pattern]], [[rule]] and [[assert]] to compose a schema,
@@ -138,6 +137,5 @@
         schema-bindings (eval-bindings compiler document schema)]
     {:schema schema
      :tests  (->> (xpath/->seq document)
-                  (map (fn [node]
-                         (apply-matching-test compiler document tests schema-bindings node)))
+                  (map (partial apply-matching-test compiler document tests schema-bindings))
                   (remove nil?))}))
