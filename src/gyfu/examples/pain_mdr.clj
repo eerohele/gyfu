@@ -1,10 +1,11 @@
 (ns ^:no-doc gyfu.examples.pain-mdr
   (:require [clojure.java.io :as io]
             [clojure.data.zip.xml :refer [xml1-> attr text]]
+            [gyfu.core :as g]
+            [gyfu.saxon :as saxon]
             [gyfu.elements :refer :all]
             [clojure.edn :as edn]
             [clj-time.core :as t]
-            [clj-time.coerce :as c]
             [clj-time.local :as l])
   (:refer-clojure :exclude [assert])
   (:import (org.iban4j BicUtil IbanUtil)))
@@ -87,15 +88,14 @@
 
           (pattern "Requested Execution Date"
                    {:id :ReqdExctnDt}
-                   (rule "ReqdExctnDt"
-                         (assert "The requested execution date must be a maximum of 5 days before or 90 days after the current date."
-                                 #(date-is-within-allowed-interval? 5 90 (c/to-date (xml1-> % text))))))
                    (rule "ReqdExctnDt" of
+                         (report (fn [_ >>] (str "The requested execution date " (>> ".") " is not within the allowed interval of -5 and +90 days of the current date."))
+                                 #(date-is-within-allowed-interval? 5 90 (l/to-local-date-time (xml1-> % text))))))
 
           (pattern "Group Header"
                    {:id :GrpHdr}
                    (rule "GrpHdr/NbOfTxs" of
-                         (assert "The reported number of transactions matches the actual number of transactions in the message."
+                         (report (fn [_ >>] "The reported number of transactions (" (>> ".") ") doesn't match the actual number of transactions in the message.")
                                  "xs:int(.) eq count($CdtTrfTxInf)"))
                    (rule "GrpHdr/CtrlSum" of
                          (report (fn [_ >>] (str "The reported control sum " (>> ".") " doesn't match the actual total sum of all transactions in the message."))
@@ -136,3 +136,10 @@
                    (rule "RmtInf[Strd/RfrdDocInf/Tp/CdOrPrtry/Cd = 'CREN']" of
                          (assert "The sum total amount of all credit notes within a transaction must be less than or equal to the sum total amount of the credit invoices within that transaction."
                                  "sum(Strd[RfrdDocInf/Tp/CdOrPrtry/Cd = 'CREN']/RfrdDocAmt/CdtNote) le sum(Strd[RfrdDocInf/Tp/CdOrPrtry/Cd = 'CINV']/RfrdDocAmt/*)")))))
+
+(defn run
+  "Compile and apply the example schema."
+  []
+  (let [options {:default-xpath-namespace "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"}
+        schema (g/compile-schema pain-mdr-schema options)]
+    (g/apply-schema schema  (-> "examples/ISO20022.xml" io/resource saxon/build))))
