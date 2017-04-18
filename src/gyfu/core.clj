@@ -33,6 +33,7 @@
   "Apply a Schematron test (an `assert` or `report` element)."
   [compiler node bindings {:keys [test message]}]
   {:node          node
+   :node-name     (.getNodeName node)
    :line-number   (.getLineNumber node)
    :column-number (.getColumnNumber node)
    :message       (if (u/function? message)
@@ -135,7 +136,8 @@
   [{:keys [schema options tests]} document]
   (let [compiler (xpath-compiler options)
         schema-bindings (eval-bindings compiler document schema)]
-    {:schema schema
-     :tests  (->> (xpath/->seq document)
-                  (map (partial apply-matching-test compiler document tests schema-bindings))
-                  (remove nil?))}))
+    {:schema       schema
+     :document-uri (.getBaseURI document)
+     :tests        (->> (xpath/->seq document)
+                        (map (partial apply-matching-test compiler document tests schema-bindings))
+                        (remove nil?))}))

@@ -66,7 +66,7 @@
                     :see "https://www.currency-iso.org/en/home/tables/table-a1.html"}
                    ;; The `of` is an alias for an empty map. You can also use `nil` or `{}` if you want.
                    (rule "*[@Ccy]" of
-                         (assert "The currency code is a valid active or historic currency code."
+                         (report (fn [_ value-of] (str "Currency code " (value-of ".") " is not a valid ISO 4217 currency code."))
                                  ;; In addition to XPath assertions, you can also call Clojure functions.
                                  has-valid-currency-code?)))
 
@@ -74,7 +74,7 @@
                    {:id  :BIC
                     :see "https://www.iso9362.org"}
                    (rule "BIC" of
-                         (assert "The BIC is a valid ISO 9362 Business Identifier Code."
+                         (report (fn [_ value-of] (str (value-of ".") " is not a valid ISO 9362 Business Identifier Code."))
                                  ;; The wealth of JVM libraries is at your disposal to check your XML.
                                  has-valid-bic-code?)))
 
@@ -82,7 +82,7 @@
                    {:id  :IBAN
                     :see "https://www.iso.org/standard/41031.html"}
                    (rule "IBAN" of
-                         (assert "The IBAN is a valid ISO 13616 International Bank Account Number."
+                         (report (fn [_ >>] (str (>> ".") " is not a valid ISO 13616 International Bank Account Number."))
                                  has-valid-iban-number?)))
 
           (pattern "Requested Execution Date"
@@ -97,7 +97,7 @@
                          (assert "The reported number of transactions matches the actual number of transactions in the message."
                                  "xs:int(.) eq count($CdtTrfTxInf)"))
                    (rule "GrpHdr/CtrlSum" of
-                         (assert "The reported control sum matches the actual total sum of all transactions in the message."
+                         (report (fn [_ >>] (str "The reported control sum " (>> ".") " doesn't match the actual total sum of all transactions in the message."))
                                  "xs:double(.) eq sum($CdtTrfTxInf/Amt/*)")))
 
           (pattern "Charge Bearer"

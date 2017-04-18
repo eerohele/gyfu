@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.9.0-alpha15"]
                  [net.sf.saxon/Saxon-HE "9.7.0-15"]
                  [org.clojure/data.xml "0.2.0-alpha2"]
-                 [org.clojure/data.zip "0.1.2"]]
+                 [org.clojure/data.zip "0.1.2"]
+                 [clansi "1.0.0"]]
   :jar-exclusions [#".*pain_mdr\.clj" #".*resources/examples/.*\.xml"]
   :main ^:skip-aot gyfu.core
   :target-path "target/%s"

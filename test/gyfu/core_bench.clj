@@ -1,10 +1,10 @@
 (ns gyfu.core-bench
-  (:require [gyfu.examples.pain-mdr :as examples]
+  (:require [gyfu.core :as g]
+            [gyfu.examples.pain-mdr :as examples]
+            [gyfu.saxon :as saxon]
             [criterium.core :refer [bench]]
             [clojure.test :refer :all]
-            [gyfu.core :as g]
-            [clojure.java.io :as io]
-            [gyfu.saxon :as saxon]))
+            [clojure.java.io :as io]))
 
 (defn load-fixture [path]
   (-> (str "examples/" path) io/resource io/as-file saxon/build))
