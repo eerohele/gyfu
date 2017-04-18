@@ -68,18 +68,18 @@
 
   (schema "ISO20022 Payments Initiation Message Schema"
           ;; Set XPath variable `CdtTrfTxInf` that points to all `<CdtTrfTxInf>` elements in the document.
-          {:let {:CdtTrfTxInf "Document/CstmrCdtTrfInitn/PmtInf/CdtTrfTxInf"}
+          {:let    {:CdtTrfTxInf "Document/CstmrCdtTrfInitn/PmtInf/CdtTrfTxInf"}
            ;; Declare the available ISO Schematron phases.
            :phases {:ISO [:Ccy :BIC :IBAN] :Date [:ReqdExctnDt]}
            ;; Use Schematron metadata.
-           :see "https://www.iso20022.org/sites/default/files/documents/general/ISO20022MDR_PaymentsInitiation_2016_2017.zip"}
+           :see    "https://www.iso20022.org/sites/default/files/documents/general/ISO20022MDR_PaymentsInitiation_2016_2017.zip"}
 
           (pattern "Currency"
-                   {:id :Ccy
+                   {:id  :Ccy
                     :see "https://www.currency-iso.org/en/home/tables/table-a1.html"}
                    ;; The `of` is an alias for an empty map. You can also use `nil` or `{}` if you want.
                    (rule "*[@Ccy]" of
-                         (report (fn [_ value-of] (str "Currency code " (value-of ".") " is not a valid ISO 4217 currency code."))
+                         (report (fn [_ >>] (str "Currency code " (>> ".") " is not a valid ISO 4217 currency code."))
                                  ;; In addition to XPath assertions, you can also call Clojure functions.
                                  has-valid-currency-code?)))
 
@@ -87,7 +87,7 @@
                    {:id  :BIC
                     :see "https://www.iso9362.org"}
                    (rule "BIC" of
-                         (report (fn [_ value-of] (str (value-of ".") " is not a valid ISO 9362 Business Identifier Code."))
+                         (report (fn [_ >>] (str (>> ".") " is not a valid ISO 9362 Business Identifier Code."))
                                  ;; The wealth of JVM libraries is at your disposal to check your XML.
                                  has-valid-bic-code?)))
 
