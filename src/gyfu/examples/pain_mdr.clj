@@ -154,4 +154,4 @@
   []
   (let [options {:default-xpath-namespace "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"}
         schema (g/compile-schema pain-mdr-schema options)]
-    (g/apply-schema schema  (-> "examples/ISO20022.xml" io/resource saxon/build))))
+    (g/apply-schema schema (-> "examples/ISO20022.xml" io/resource saxon/build))))
