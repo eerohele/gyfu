@@ -7,7 +7,7 @@
             [clojure.java.io :as io]))
 
 (defn load-fixture [path]
-  (-> (str "examples/" path) io/resource io/as-file saxon/build))
+  (-> (str "examples/" path) io/resource saxon/build))
 
 (deftest ^:bench benchmark-parse-and-validate-same-file-n-times
   (let [options {:default-xpath-namespace
