@@ -130,7 +130,7 @@
                            [(assert \"Something awesome\" \"xs:int(.) gt 0\")])])]))
 
   ;; compile a schema and apply it to your input xml
-  (-> my-awesome-schema (compile nil) (apply my-input-xml))
+  (-> my-awesome-schema (compile-schema nil) (apply-schema my-input-xml))
   ```
   "
   [{:keys [schema options tests]} document]
