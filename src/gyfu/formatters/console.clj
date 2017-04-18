@@ -13,7 +13,7 @@
   [tag]
   (write :grey "<" tag ">"))
 
-(defn format
+(defn write-results
   [results]
   (writeln :cyan (-> results :schema :title))
   (write :white "on ")
