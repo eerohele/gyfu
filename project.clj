@@ -17,7 +17,8 @@
                                   [org.xmlunit/xmlunit-core "2.3.0"]
                                   [org.iban4j/iban4j "3.2.1"]
                                   [clj-time "0.13.0"]]}}
-  :codox {:metadata {:doc/format :markdown}}
+  :codox {:metadata {:doc/format :markdown}
+          :output-path "target/docs"}
   :test-selectors {:default (complement :bench)
                    :bench :bench
                    :all (constantly true)}
