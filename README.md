@@ -21,6 +21,7 @@ Compared to [the XSLT Schematron implementation][skeleton], Gyfu aims to offer t
 
 ## TODO
 
+- [ ] Support the `diagnostics` element
 - [ ] Command-line interface
 - [ ] Parse Schematron schema from `.sch` XML file
 - [ ] Console output
