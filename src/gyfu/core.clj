@@ -1,4 +1,5 @@
 (ns gyfu.core
+  "Gyfu is a library for testing your XML with XPath and Clojure."
   (:require [gyfu.utils :as u]
             [gyfu.xpath :as xpath]
             [gyfu.saxon :as saxon]))
@@ -16,7 +17,7 @@
 
   This function evaluates `1` as an XPath expression and transforms the map into
   a binding vector like this: `[:one 1]`. That's what the functions in the
-  [xpath] namespace take as a parameter.
+  [[xpath]] namespace take as a parameter.
 
   If you need to set the value of the variable to a string, use single quotes
   like you would in an XSLT `@select` attribute. As in:
@@ -113,7 +114,8 @@
   "Validate the given XML document against a schema.
 
   Use [[schema]], [[pattern]], [[rule]] and [[assert]] to compose a schema,
-  [[compile]] to compile the resulting schema, then hand it off to me.
+  [[compile-schema]] to compile the resulting schema, then hand it off to
+  [[apply-schema]].
 
   Example:
 

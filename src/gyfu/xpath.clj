@@ -1,4 +1,5 @@
 (ns gyfu.xpath
+    "Select and pattern match things in XML documents with XPath."
     (:require [gyfu.saxon :as saxon])
     (:refer-clojure :exclude [ns])
     (:import
@@ -99,7 +100,7 @@
     (doto selector (.setContextItem context))))
 
 (defn ->seq
-  "Return a seq on the nodes in the given document."
+  "Return a seq on the nodes in the given root node."
   [node]
   (iterator-seq (.axisIterator node Axis/DESCENDANT_OR_SELF)))
 
@@ -149,7 +150,8 @@
       (.getStringValue value))))
 
 (defn pattern
-  "Make an XPath pattern from a string."
+  "Make an XPath [Pattern](http://saxonica.com/html/documentation/javadoc/index.html?net/sf/saxon/pattern/Pattern.html)
+  from a string."
   [compiler string]
   (let [static-context (static-context compiler)
         package-data (package-data static-context)]
