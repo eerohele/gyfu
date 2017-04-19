@@ -32,13 +32,13 @@
   (->qname [name]))
 
 (extend-protocol QNameable QName
-  (->qname [qname] qname))
+                 (->qname [qname] qname))
 
 (extend-protocol QNameable String
-  (->qname [qname] (QName. qname)))
+                 (->qname [qname] (QName. qname)))
 
 (extend-protocol QNameable Keyword
-  (->qname [qname] (-> qname name ->qname)))
+                 (->qname [qname] (-> qname name ->qname)))
 
 (defprotocol XmlNode
   "A protocol for things that can be converted into a Saxon
@@ -48,20 +48,20 @@
 (extend-protocol XmlNode XdmNode (build [xdmnode] xdmnode))
 
 (extend-protocol XmlNode String
-  (build [xml-string]
-    (.build builder (StreamSource. (StringReader. xml-string)))))
+                 (build [xml-string]
+                   (.build builder (StreamSource. (StringReader. xml-string)))))
 
 (extend-protocol XmlNode File
-  (build [file] (.build builder file)))
+                 (build [file] (.build builder file)))
 
 (extend-protocol XmlNode Source
-  (build [source] (.build builder source)))
+                 (build [source] (.build builder source)))
 
 (extend-protocol XmlNode URI
-  (build [^URI uri] (.build builder (StreamSource. uri))))
+                 (build [^URI uri] (.build builder (StreamSource. uri))))
 
 (extend-protocol XmlNode URL
-  (build [^URL url] (.build builder (StreamSource. (.toString url)))))
+                 (build [^URL url] (.build builder (StreamSource. (.toString url)))))
 
 (defprotocol XmlValue
   "A protocol for things that can be converted into a Saxon
@@ -69,13 +69,13 @@
   (->xdmvalue [value]))
 
 (extend-protocol XmlValue XdmValue
-  (->xdmvalue [xdmvalue] xdmvalue))
+                 (->xdmvalue [xdmvalue] xdmvalue))
 
 (extend-protocol XmlValue Integer
-  (->xdmvalue [int] (long int)))
+                 (->xdmvalue [int] (long int)))
 
 (extend-protocol XmlValue Object
-  (->xdmvalue [obj] (XdmAtomicValue. obj)))
+                 (->xdmvalue [obj] (XdmAtomicValue. obj)))
 
 (defn zipper
   "Create a zipper from a Saxon

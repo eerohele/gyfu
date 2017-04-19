@@ -1,15 +1,15 @@
 (ns gyfu.xpath
-    "Select and pattern match things in XML documents with XPath."
-    (:require [gyfu.saxon :as saxon])
-    (:refer-clojure :exclude [ns])
-    (:import
-      (net.sf.saxon.s9api Axis
-                          XdmAtomicValue
-                          XdmNode
-                          XdmValue
-                          XPathSelector
-                          XPathCompiler)
-      (net.sf.saxon.pattern Pattern)))
+  "Select and pattern match things in XML documents with XPath."
+  (:require [gyfu.saxon :as saxon])
+  (:refer-clojure :exclude [ns])
+  (:import
+   (net.sf.saxon.s9api Axis
+                       XdmAtomicValue
+                       XdmNode
+                       XdmValue
+                       XPathSelector
+                       XPathCompiler)
+   (net.sf.saxon.pattern Pattern)))
 
 ;; An XPath namespace composed of a string prefix and a string URI.
 (defrecord Namespace [prefix uri])
@@ -112,10 +112,10 @@
   [compiler context pattern & bindings]
   (let [selector (bind-selector compiler :pattern pattern context bindings)]
     (XdmValue.
-      (filter (fn [node]
-                (.setContextItem selector node)
-                (.effectiveBooleanValue selector))
-              (->seq context)))))
+     (filter (fn [node]
+               (.setContextItem selector node)
+               (.effectiveBooleanValue selector))
+             (->seq context)))))
 
 (defn is?
   "Given an XML context and an XPath expression, return a boolean that
@@ -129,7 +129,7 @@
   ; => true"
   [compiler context expression & bindings]
   (.effectiveBooleanValue
-    (bind-selector compiler :expression expression context bindings)))
+   (bind-selector compiler :expression expression context bindings)))
 
 (defn select
   "Return a sequence of values that match an XPath expression in the given

@@ -27,8 +27,8 @@
   ```"
   [compiler context element]
   (mapcat
-    (fn [[name value]] [name (xpath/select compiler context value)])
-    (-> element :attributes :let)))
+   (fn [[name value]] [name (xpath/select compiler context value)])
+   (-> element :attributes :let)))
 
 (defn apply-test
   "Apply a Schematron test (an `assert` or `report` element)."

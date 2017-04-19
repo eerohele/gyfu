@@ -39,7 +39,7 @@
 (deftest matches-xpath-pattern
   (let [compiler (xpath/compiler)
         node (xpath/select compiler (saxon/build "<num>1</num>") "num[1]")]
-        (is (= (xpath/matches? compiler node (xpath/pattern compiler "num[xs:int(.) eq 1]")) true))))
+    (is (= (xpath/matches? compiler node (xpath/pattern compiler "num[xs:int(.) eq 1]")) true))))
 
 (deftest set-xpath-variable-for-expression
   (let [compiler (xpath/compiler)

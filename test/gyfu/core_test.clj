@@ -108,7 +108,7 @@
         b (pattern "b" {:id :b} (rule "b" nil (assert "b" "b")))
         c (pattern "c" {:id :c} (rule "c" nil (assert "c" "c")))]
     (is (= (g/get-active-patterns
-             (schema "schema" {:phases {:my-phase #{:a :b}}} a b c) :my-phase)
+            (schema "schema" {:phases {:my-phase #{:a :b}}} a b c) :my-phase)
            #{a b}))))
 
 (deftest active-patterns-nil-returns-all-patterns

@@ -22,7 +22,8 @@
   :test-selectors {:default (complement :bench)
                    :bench :bench
                    :all (constantly true)}
-  :plugins [[lein-codox "0.10.3"]
+  :plugins [[lein-cljfmt "0.5.6"]
+            [lein-codox "0.10.3"]
             [lein-kibit "0.1.3"]
             [lein-marginalia "0.9.0"]
             [com.jakemccrary/lein-test-refresh "0.19.0"]

@@ -15,5 +15,5 @@
         schema (g/compile-schema examples/pain-mdr-schema options)
         files ["ISO20022.xml" "DABA_ADV.xml" "DABA_REF.xml" "DABA_SDVA.xml"]]
     (bench
-      (dotimes [_ 100]
-        (map (partial g/apply-schema schema) (mapv load-fixture files))))))
+     (dotimes [_ 100]
+       (map (partial g/apply-schema schema) (mapv load-fixture files))))))

@@ -23,10 +23,10 @@
 
 (s/def ::xpath-fn-args
   (s/and
-    (s/cat :compiler   ::xpath-compiler
-           :context    ::xdmvalue
-           :expression ::xpath-expression
-           :bindings   ::bindings)))
+   (s/cat :compiler   ::xpath-compiler
+          :context    ::xdmvalue
+          :expression ::xpath-expression
+          :bindings   ::bindings)))
 
 (s/fdef xpath/select
         :args ::xpath-fn-args :ret ::xdmvalue)
